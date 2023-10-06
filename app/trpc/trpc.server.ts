@@ -6,28 +6,16 @@ import { initTRPC } from "@trpc/server";
 import { getUserById } from "~/services/clerk.server";
 
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
-  try {
-    const session = await getAuth({
-      request: opts.req,
-      context: {},
-      params: {},
-    });
-
-    console.log("user id from session", session);
-    return {
-      resHeaders: opts.resHeaders,
-      userId: session?.userId,
-    }
-  } catch (error) {
-    debugger;
-    const err = error as any as Response;
-    console.log("session", 'error');
-    console.error(await err.text());
-  }
+  const session = await getAuth({
+    request: opts.req,
+    context: {},
+    params: {},
+  });
 
   return {
-    resHeaders: opts.resHeaders
-  };
+    resHeaders: opts.resHeaders,
+    userId: session?.userId,
+  }
 };
 
 type Context = inferAsyncReturnType<typeof createContext>;
