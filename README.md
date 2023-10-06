@@ -1,4 +1,4 @@
-# Clerk tRPC
+# Clerk, tRPC, Remix
 
 - [Remix Docs](https://remix.run/docs)
 
