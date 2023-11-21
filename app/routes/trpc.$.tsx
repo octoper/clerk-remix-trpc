@@ -3,15 +3,15 @@ import { fetchRequestHandler } from '@trpc/server/adapters/fetch';
 import { appRouter, createContext } from "~/trpc/trpc.server";
 
 export const loader = async (args: LoaderFunctionArgs) => {
-  return handleRequest(args);
+  return await handleRequest(args);
 };
 
 export const action = async (args: ActionFunctionArgs) => {
-  return handleRequest(args);
+  return await handleRequest(args);
 };
 
-function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
-  return fetchRequestHandler({
+async function handleRequest(args: LoaderFunctionArgs | ActionFunctionArgs) {
+  return await fetchRequestHandler({
     endpoint: '/trpc',
     req: args.request,
     router: appRouter,

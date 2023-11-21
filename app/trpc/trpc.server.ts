@@ -2,19 +2,26 @@ import { getAuth } from "@clerk/remix/ssr.server";
 import type { inferAsyncReturnType } from "@trpc/server";
 import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 
-import { initTRPC } from "@trpc/server";
+import { TRPCError, initTRPC } from "@trpc/server";
 import { getUserById } from "~/services/clerk.server";
 
 export const createContext = async (opts: FetchCreateContextFnOptions) => {
-  const session = await getAuth({
-    request: opts.req,
-    context: {},
-    params: {},
-  });
+  try {
+    const session = await getAuth({
+      request: opts.req,
+      context: {},
+      params: {},
+    });
 
-  return {
-    resHeaders: opts.resHeaders,
-    userId: session?.userId,
+    return {
+      resHeaders: opts.resHeaders,
+      userId: session?.userId,
+    }
+  } catch (error) {
+    throw new TRPCError({
+      code: 'UNAUTHORIZED',
+      message: 'Unauthorized',
+    });
   }
 };
 
