@@ -5,24 +5,28 @@ import type { FetchCreateContextFnOptions } from '@trpc/server/adapters/fetch';
 import { TRPCError, initTRPC } from "@trpc/server";
 import { getUserById } from "~/services/clerk.server";
 
-export const createContext = async (opts: FetchCreateContextFnOptions) => {
+export const getAuthTrpc = async (request: Request) => {
   try {
-    const session = await getAuth({
-      request: opts.req,
+    return await getAuth({
+      request: request,
       context: {},
       params: {},
     });
-
-    return {
-      resHeaders: opts.resHeaders,
-      userId: session?.userId,
-    }
   } catch (error) {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'Unauthorized',
       cause: error,
     });
+  }
+}
+
+export const createContext = async (opts: FetchCreateContextFnOptions) => {
+  const session = await getAuthTrpc(opts.req);
+
+  return {
+    resHeaders: opts.resHeaders,
+    userId: session?.userId,
   }
 };
 
