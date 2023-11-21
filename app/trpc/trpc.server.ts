@@ -21,6 +21,7 @@ export const createContext = async (opts: FetchCreateContextFnOptions) => {
     throw new TRPCError({
       code: 'UNAUTHORIZED',
       message: 'Unauthorized',
+      cause: error,
     });
   }
 };
